@@ -1,0 +1,51 @@
+[project]
+name = "bankproj"
+version = "0.1.0"
+description = "Bank project for coursework"
+authors = [{name = "Your Name", email = "your.email@example.com"}]
+requires-python = ">=3.12"
+dependencies = [
+    "pandas==3.0.1",
+    "requests>=2.31.0",
+    "python-dotenv==1.2.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.0.2",
+    "flake8==7.3.0",
+    "black==26.3.1",
+    "mypy==1.19.1",
+    "isort==8.0.1",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 119
+exclude = '''
+/(
+    \.git
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 119
+
+[tool.mypy]
+python_version = "3.12"
+disallow_untyped_defs = true
+warn_return_any = true
+exclude = '''
+/(
+    venv
+)/
+'''
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
