@@ -22,6 +22,9 @@ load_dotenv(ENV_PATH)
 def load_operations(filepath: str = DATA_PATH) -> pd.DataFrame:
     """Загружает транзакции из Excel-файла."""
     df = pd.read_excel(filepath)
+    df["Дата операции"] = pd.to_datetime(df["Дата операции"], errors="coerce")
+    df = df.dropna(subset=["Дата операции"])
+
     logger.info(f"Загружено {len(df)} транзакции из {filepath}")
     return df
 
@@ -53,24 +56,25 @@ def greeting(datetime_str: str) -> str:
 
 
 def get_cards_info(df: pd.DataFrame, date_str: str) -> list[dict[str, Any]]:
-    """Возвращает список словарей с номером карты, суммой трат и кешбэком за определённый период"""
+    """Возвращает список словарей с номером карты, суммой трат и кэшбэком за определённый период"""
 
     end_date = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
     start_date = end_date.replace(day=1, hour=0, minute=0, second=0)
 
     df_filtered = df[(df["Дата операции"] >= start_date) & (df["Дата операции"] <= end_date) & (df["Статус"] == "OK")]
 
-    cards = df_filtered.groupby("Номер карты").agg({"Сумма платежа": "sum", "Кешбэк": "sum"}).reset_index()
+    cards = df_filtered.groupby("Номер карты").agg({"Сумма платежа": "sum", "Кэшбэк": "sum"}).reset_index()
 
     result = []
     for _, row in cards.iterrows():
-        card_number = str(int(row["Номер карты"])) if not pd.isna(row["Номер карты"]) else ""
+        card_value = str(row["Номер карты"]) if not pd.isna(row["Номер карты"]) else ""
+        card_number = card_value[-4:] if len(card_value) >= 4 else card_value
 
         result.append(
             {
                 "last_digits": card_number,
                 "total_spent": round(row["Сумма платежа"], 2),
-                "cashback": round(row["Кешбэк"], 2) if pd.notna(row["Кешбэк"]) else 0.0,
+                "cashback": round(row["Кэшбэк"], 2) if pd.notna(row["Кэшбэк"]) else 0.0,
             }
         )
 
@@ -78,7 +82,7 @@ def get_cards_info(df: pd.DataFrame, date_str: str) -> list[dict[str, Any]]:
     return result
 
 
-def top_transactions(df: pd.DataFrame, date_str: str, limit: int = 5) -> list[dict[str, Any]]:
+def get_top_transactions(df: pd.DataFrame, date_str: str, limit: int = 5) -> list[dict[str, Any]]:
     """Возвращает топ транзакций по сумме за период с начала месяца по указанную дату"""
 
     end_date = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
