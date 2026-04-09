@@ -3,12 +3,10 @@ import logging
 from collections import defaultdict
 from datetime import datetime
 from typing import Any
+
 import pandas as pd
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +43,9 @@ def profitable_cashback_categories(year: int, month: int, transactions: list[dic
             dt = datetime.strptime(transaction.get("Дата операции", ""), DATE_FORMAT)
 
         except (ValueError, KeyError):
-            logger.warning(f"Пропущена транзакция с некорреткной датой: {transaction.get('Дата операции', 'отсутствует')}")
+            logger.warning(
+                f"Пропущена транзакция с некорреткной датой: {transaction.get('Дата операции', 'отсутствует')}"
+            )
             skipped_no_date += 1
             continue
 

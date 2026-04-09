@@ -1,6 +1,8 @@
 import json
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import patch, MagicMock
+
 from src.services import *
 
 
@@ -38,11 +40,7 @@ def test_invalid_month(mock_logger):
 def test_missing_category(mock_logger):
     """Тест проверяющий работу функции при отсутствии категории"""
     transactions = [
-        {
-            "Дата операции": "2021-12-21 10:00:00",
-            "Статус": "ОК",
-            "Кэшбэк": 10.00
-        },
+        {"Дата операции": "2021-12-21 10:00:00", "Статус": "ОК", "Кэшбэк": 10.00},
     ]
 
     result = profitable_cashback_categories(2021, 12, transactions)

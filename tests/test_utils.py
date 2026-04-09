@@ -1,21 +1,22 @@
 import json
-from unittest.mock import mock_open, patch
-import pytest
-import sys
 import os
+import sys
+from unittest.mock import mock_open, patch
+
 import pandas as pd
+import pytest
 import requests
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
 from utils import (
-    load_user_settings,
+    get_cards_info,
+    get_currency_rates,
+    get_stock_prices,
+    get_top_transactions,
     greeting,
     load_operations,
-    get_cards_info,
-    get_top_transactions,
-    get_currency_rates,
-    get_stock_prices
+    load_user_settings,
 )
 
 
@@ -49,16 +50,19 @@ def test_load_user_settings_invalid_json():
             load_user_settings("invalid.json")
 
 
-@pytest.mark.parametrize("time_str, expected", [
-    ("2024-02-15 06:00:00", "Доброе утро"),
-    ("2025-11-02 11:10:20", "Доброе утро"),
-    ("2020-02-28 12:00:00", "Добрый день"),
-    ("2021-07-05 15:35:18", "Добрый день"),
-    ("2024-05-17 18:00:00", "Добрый вечер"),
-    ("2024-10-13 22:59:59", "Добрый вечер"),
-    ("2023-08-10 23:01:01", "Доброй ночи"),
-    ("2020-09-25 05:59:59", "Доброй ночи"),
-])
+@pytest.mark.parametrize(
+    "time_str, expected",
+    [
+        ("2024-02-15 06:00:00", "Доброе утро"),
+        ("2025-11-02 11:10:20", "Доброе утро"),
+        ("2020-02-28 12:00:00", "Добрый день"),
+        ("2021-07-05 15:35:18", "Добрый день"),
+        ("2024-05-17 18:00:00", "Добрый вечер"),
+        ("2024-10-13 22:59:59", "Добрый вечер"),
+        ("2023-08-10 23:01:01", "Доброй ночи"),
+        ("2020-09-25 05:59:59", "Доброй ночи"),
+    ],
+)
 def test_greeting(time_str, expected):
     """Тест приветствия в зависимости от времени суток."""
     result = greeting(time_str)
