@@ -1,7 +1,8 @@
 import json
-import pytest
 from unittest.mock import patch
+
 import pandas as pd
+import pytest
 
 from src.views import main_page
 
@@ -13,8 +14,9 @@ from src.views import main_page
 @patch("src.views.get_currency_rates")
 @patch("src.views.load_operations")
 @patch("src.views.load_user_settings")
-def test_main_page_returns_json(mock_settings, mock_operations, mock_currency, mock_stocks, mock_greeting, mock_cards,
-                                mock_top):
+def test_main_page_returns_json(
+    mock_settings, mock_operations, mock_currency, mock_stocks, mock_greeting, mock_cards, mock_top
+):
     "Тест проверяет, что функция возвращает JSON строку"
     mock_operations.return_value = pd.DataFrame()
     mock_settings.return_value = {"user_currencies": [], "user_stocks": []}
@@ -38,8 +40,9 @@ def test_main_page_returns_json(mock_settings, mock_operations, mock_currency, m
 @patch("src.views.get_currency_rates")
 @patch("src.views.load_operations")
 @patch("src.views.load_user_settings")
-def test_main_page_has_required_keys(mock_settings, mock_operations, mock_currency, mock_stocks, mock_greeting,
-                                     mock_cards, mock_top):
+def test_main_page_has_required_keys(
+    mock_settings, mock_operations, mock_currency, mock_stocks, mock_greeting, mock_cards, mock_top
+):
     "Тест проверяет, что в получившемся JSON есть необходимые ключи"
 
     mock_operations.return_value = pd.DataFrame()
@@ -67,8 +70,9 @@ def test_main_page_has_required_keys(mock_settings, mock_operations, mock_curren
 @patch("src.views.get_currency_rates")
 @patch("src.views.load_operations")
 @patch("src.views.load_user_settings")
-def test_greeting_call_correct_data(mock_settings, mock_operations, mock_currency, mock_stocks, mock_greeting, mock_cards,
-                               mock_top):
+def test_greeting_call_correct_data(
+    mock_settings, mock_operations, mock_currency, mock_stocks, mock_greeting, mock_cards, mock_top
+):
     """Тест проверяющий, что функция greeting вызывает корректную дату"""
     mock_operations.return_value = pd.DataFrame()
     mock_settings.return_value = {"user_currencies": [], "user_stocks": []}

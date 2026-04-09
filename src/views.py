@@ -9,18 +9,16 @@ from src.utils import (
     get_cards_info,
     get_currency_rates,
     get_stock_prices,
+    get_top_transactions,
     greeting,
     load_operations,
     load_user_settings,
-    get_top_transactions,
 )
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 logger = logging.getLogger(__name__)
+
 
 def main_page(datetime_str: str) -> str:
     """Функция получения информации форматы JSON для главной страницы"""
